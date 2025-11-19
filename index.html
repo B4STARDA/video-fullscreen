@@ -34,16 +34,17 @@
         left: 20px;
         z-index: 10;
         display: flex;
+        flex-direction: column;
         gap: 10px;
     }
 
     button {
-        padding: 10px 16px;
+        padding: 10px 14px;
         font-size: 14px;
         cursor: pointer;
         border: none;
         border-radius: 6px;
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, .8);
     }
 
     button:hover {
@@ -55,7 +56,8 @@
 <body>
 
 <div class="controls">
-    <button id="soundBtn">🔈 Activate Sound</button>
+    <button id="soundBtn">🔈 Sound On</button>
+    <button id="playBtn">⏸ Pause</button>
     <button id="fitBtn">🔲 Fit Video</button>
 </div>
 
@@ -65,15 +67,31 @@
 </video>
 
 <script>
-const video = document.getElementById("video");
+const video   = document.getElementById("video");
 const soundBtn = document.getElementById("soundBtn");
-const fitBtn = document.getElementById("fitBtn");
+const playBtn = document.getElementById("playBtn");
+const fitBtn  = document.getElementById("fitBtn");
 
 // ---- SOUND BUTTON ----
 soundBtn.addEventListener("click", () => {
-    video.muted = false;
-    video.play();
-    soundBtn.textContent = "🔊 Sound On";
+    if (video.muted) {
+        video.muted = false;
+        soundBtn.textContent = "🔊 Sound Off";
+    } else {
+        video.muted = true;
+        soundBtn.textContent = "🔈 Sound On";
+    }
+});
+
+// ---- PLAY / PAUSE BUTTON ----
+playBtn.addEventListener("click", () => {
+    if (video.paused) {
+        video.play();
+        playBtn.textContent = "⏸ Pause";
+    } else {
+        video.pause();
+        playBtn.textContent = "▶️ Play";
+    }
 });
 
 // ---- FIT / FILL BUTTON ----
@@ -81,7 +99,7 @@ let isFit = false;
 
 fitBtn.addEventListener("click", () => {
     if (!isFit) {
-        video.style.objectFit = "contain"; 
+        video.style.objectFit = "contain";
         fitBtn.textContent = "⬜ Fill Screen";
         isFit = true;
     } else {
